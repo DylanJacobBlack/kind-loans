@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import LoanRequests from "./pages/LoanRequests/LoanRequests";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import LoanSearchPage from "./pages/LandingPage/LoanSearchPage";
@@ -20,7 +20,7 @@ import SignUp from "./pages/SignUp/SignUp";
 import { Toaster } from "react-hot-toast";
 import { store } from "./store";
 import { Provider } from "react-redux";
-import { createTheme } from "@mui/material/styles";
+import AppTheme from "./theme/ThemeProvider";
 
 const queryClient = new QueryClient();
 
@@ -81,58 +81,18 @@ const router = createBrowserRouter([
   },
 ]);
 
-const theme = createTheme({
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          fontSize: "14px", // Change font size for all buttons
-          fontFamily: `"Inter", sans-serif`, // Change font family
-          textTransform: "none", // Prevents uppercase transformation
-        },
-      },
-    },
-  },
-  typography: {
-    fontFamily: `"Inter", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`,
-    h2: {
-      fontSize: "30px",
-      lineHeight: "28px",
-      fontWeight: 500,
-    },
-    h3: {
-      fontSize: "22px",
-      lineHeight: "28px",
-      fontWeight: 500,
-    },
-    h4: {
-      fontSize: "16px",
-      lineHeight: "24px",
-      fontWeight: 500,
-    },
-    body2: {
-      fontSize: "14px",
-      lineHeight: "21px",
-      fontWeight: 400,
-    },
-    caption: {
-      fontSize: "14px",
-      lineHeight: "21px",
-      fontWeight: 500,
-    }
-  },
-});
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
+      <AppTheme>
         <CssBaseline />
         <Toaster position="bottom-center" />
         <Provider store={store}>
           <RouterProvider router={router} />
         </Provider>
-      </ThemeProvider>
+      </AppTheme>
     </QueryClientProvider>
   </StrictMode>
 );

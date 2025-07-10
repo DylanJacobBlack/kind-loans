@@ -13,12 +13,14 @@ import AdbIcon from "@mui/icons-material/Adb";
 import profilePic from "../assets/dummypic.png";
 import SectionTitle from "./SectionTitle";
 import { Button } from "@mui/material";
+import { brand } from "../theme/customizations/themePrimitives";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setToken } from "../features/auth/authSlice";
 import { RootState } from "../store";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import {MoneyBagIcon} from "../assets/icons.tsx";
 
 function Header({ sectionTitle }: { sectionTitle: string }) {
   const dispatch = useDispatch();
@@ -43,39 +45,24 @@ function Header({ sectionTitle }: { sectionTitle: string }) {
     <AppBar position="sticky" elevation={4}>
       <Container maxWidth="lg" sx={{
           p: 0,
-          background: "#2E3036"
+          background: brand.primary,
       }}>
         <Toolbar disableGutters sx={{ px: 2 }}>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <MoneyBagIcon color="white" />
           <Typography
             variant="h6"
             noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              textDecoration: "none",
-            }}
-          >
-            kind loans
-          </Typography>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontWeight: 400,
               // letterSpacing: ".3rem",
-              color: "inherit",
               textDecoration: "none",
+                color: 'white'
             }}
           >
             Kind Loans

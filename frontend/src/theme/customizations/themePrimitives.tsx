@@ -37,6 +37,9 @@ export const brand = {
   700: "hsl(210, 100%, 35%)",
   800: "hsl(210, 100%, 16%)",
   900: "hsl(210, 100%, 21%)",
+  primary: "#034792",
+  greenLight: "#4C842214",
+  greenDark: "#4C8422",
 };
 
 export const gray = {
@@ -96,7 +99,7 @@ export const colorSchemes = {
     palette: {
       primary: {
         light: brand[200],
-        main: brand[400],
+        main: brand.primary,
         dark: brand[700],
         contrastText: brand[50],
       },
@@ -123,9 +126,9 @@ export const colorSchemes = {
         dark: red[800],
       },
       success: {
-        light: green[300],
-        main: green[400],
-        dark: green[800],
+        light: brand.greenLight,
+        main: "#4F9816",
+        dark: "#047857",
       },
       grey: {
         ...gray,
@@ -151,7 +154,7 @@ export const colorSchemes = {
 };
 
 export const typography = {
-  fontFamily: ['"Inter", "sans-serif"'].join(","),
+  fontFamily: '"Inter", "SF Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   h1: {
     fontSize: defaultTheme.typography.pxToRem(48),
     fontWeight: 600,
@@ -159,18 +162,19 @@ export const typography = {
     letterSpacing: -0.5,
   },
   h2: {
-    fontSize: defaultTheme.typography.pxToRem(36),
-    fontWeight: 600,
-    lineHeight: 1.2,
+    fontSize: "30px",
+    lineHeight: "30px",
+    fontWeight: 500,
   },
   h3: {
-    fontSize: defaultTheme.typography.pxToRem(30),
-    lineHeight: 1.2,
+    fontSize: "22px",
+    lineHeight: "28px",
+    fontWeight: 500,
   },
   h4: {
-    fontSize: defaultTheme.typography.pxToRem(24),
-    fontWeight: 600,
-    lineHeight: 1.5,
+    fontSize: "16px",
+    lineHeight: "24px",
+    fontWeight: 500,
   },
   h5: {
     fontSize: defaultTheme.typography.pxToRem(20),
@@ -188,20 +192,24 @@ export const typography = {
     fontWeight: 500,
   },
   body1: {
-    fontSize: defaultTheme.typography.pxToRem(14),
+    fontSize: "16px",
+    lineHeight: "24px",
+    fontWeight: 400,
   },
   body2: {
-    fontSize: defaultTheme.typography.pxToRem(14),
+    fontSize: "14px",
+    lineHeight: "21px",
     fontWeight: 400,
   },
   caption: {
-    fontSize: defaultTheme.typography.pxToRem(12),
-    fontWeight: 400,
+    fontSize: "14px",
+    lineHeight: "21px",
+    fontWeight: 500,
   },
 };
 
 export const shape = {
-  borderRadius: 8,
+  borderRadius: 12,
 };
 
 const defaultShadows: Shadows = [
@@ -210,3 +218,21 @@ const defaultShadows: Shadows = [
   ...defaultTheme.shadows.slice(1),
 ];
 export const shadows = defaultShadows;
+
+export const components = {
+  MuiButton: {
+    styleOverrides: {
+      root: {
+        fontSize: "14px",
+        fontFamily: '"Inter", sans-serif',
+        textTransform: "none",
+      },
+      contained: {
+        backgroundColor: brand.primary,
+        '&:hover': {
+          backgroundColor: brand[700],
+        },
+      },
+    },
+  },
+};

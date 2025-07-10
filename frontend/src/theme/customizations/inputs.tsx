@@ -30,6 +30,7 @@ export const inputsCustomizations: Components<Theme> = {
         boxShadow: "none",
         borderRadius: theme.shape.borderRadius,
         textTransform: "none",
+        fontFamily: '"Inter", sans-serif',
         variants: [
           {
             props: {
@@ -55,17 +56,12 @@ export const inputsCustomizations: Components<Theme> = {
             },
             style: {
               color: "white",
-              backgroundColor: gray[900],
-              backgroundImage: `linear-gradient(to bottom, ${gray[700]}, ${gray[800]})`,
-              boxShadow: `inset 0 1px 0 ${gray[600]}, inset 0 -1px 0 1px hsl(220, 0%, 0%)`,
-              border: `1px solid ${gray[700]}`,
+              backgroundColor: brand.primary,
               "&:hover": {
-                backgroundImage: "none",
-                backgroundColor: gray[700],
-                boxShadow: "none",
+                backgroundColor: brand[700],
               },
               "&:active": {
-                backgroundColor: gray[800],
+                backgroundColor: brand[800],
               },
             },
           },

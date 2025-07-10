@@ -1,274 +1,223 @@
-import {Box, Button} from '@mui/material';
-import Typography from '@mui/material/Typography';
-import SearchDialog from './components/SearchDialog';
-import Divider from '@mui/material/Divider';
+import { Box, Button, Typography, Card, Divider } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import { useRef, useState, forwardRef } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { brand } from '../../theme/customizations/themePrimitives';
+import intro from '../../assets/intro.png';
+import LoanProfile from '../../types/LoanProfile';
 import { BorrowerCardWithProgress } from './components/BorrowerCard';
 import LandPageCarousel from './components/LandingPageCarousel';
+import SearchDialog from './components/SearchDialog';
 import SortFilterPopover from './components/SortFilterPopper';
-import  intro from "../../assets/intro.png";
-import {useRef, useState, Ref} from "react";
-import {useQuery} from "@tanstack/react-query";
-import LoanProfile from "../../types/LoanProfile";
-import {Error} from "@mui/icons-material";
 import {
+    BellIcon,
     DistributingFundsIcon,
-    FundingIcon,
     PostingIcon,
     RepaymentIcon,
-    StayingConnectedIcon
-} from "../../assets/icons.tsx";
-import Card from "@mui/material/Card";
+} from '../../assets/icons.tsx';
 
-function Landingpage(){
-    const targetRef = useRef<HTMLDivElement>(null);
+function SectionDivider() {
+    return (
+        <Box display="flex" justifyContent="center">
+            <Divider sx={{ width: '80%' }} />
+        </Box>
+    );
+}
 
-    const handleScroll = () => {
-        if (targetRef.current) {
-            targetRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+export default function LandingPage() {
+    const loanListRef = useRef<HTMLDivElement>(null);
+
+    const scrollToLoans = () => {
+        loanListRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
-    // testing area ends-----------------
 
     return (
         <Box>
-            <LandingIntro onAction={handleScroll} />
-            <Divider />
-            <LandingVision />
-            <Divider />
-            <LandingHowItWorks />
-            <Divider />
-            <LandingStories />
-            <Divider />
-            <LandingLoanList targetRef={targetRef} />
+            <HeroSection onBrowseClick={scrollToLoans} />
+            <LoanListSection ref={loanListRef} />
+            <SectionDivider />
+            <StoriesSection />
+            <SectionDivider />
+            <HowItWorksSection />
+            <SectionDivider />
+            <VisionSection />
         </Box>
-    )
+    );
 }
 
-function LandingIntro({onAction}) {
+function HeroSection({ onBrowseClick }: { onBrowseClick: () => void }) {
     return (
-        <Box mb='0.5rem' margin={0} alignItems={'end'} display={"flex"} sx={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${intro})`,
-            height: "568px",
-            color: "white",
-        }}>
-            <Box margin={4}>
-                <Typography gutterBottom={true} variant={"h2"}>
-                    <strong>Lend as little as $25 to help make a dream come true</strong>
+        <Box
+            display="flex"
+            alignItems="end"
+            sx={{
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${intro})`,
+                height: 568,
+                color: 'white',
+            }}
+        >
+            <Box m={4}>
+                <Typography variant="h2" gutterBottom>
+                    <strong>Fuel a woman’s business with just $25.</strong>
                 </Typography>
-                <Typography gutterBottom={true} variant={"h4"}>
-                    100% of your loan goes to supporting entrepreneurs in need.
+                <Typography variant="h4" gutterBottom>
+                    100% of your loan goes to women entrepreneurs building small businesses in rural Uganda.
                 </Typography>
-                <Box textAlign='center' marginTop={2}>
-                    <Button variant='contained' sx={{
-                        background: "#034792",
-                        borderRadius: 4,
-                    }} fullWidth={true} onClick={onAction}>
-                        Browse loans
-                    </Button>
-                </Box>
+                <Button
+                    variant="contained"
+                    fullWidth
+                    onClick={onBrowseClick}
+                    sx={{ mt: 2, bgcolor: brand.primary }}
+                >
+                    How does Kind Loans work?
+                </Button>
             </Box>
         </Box>
     );
 }
 
-function LandingVision() {
+function VisionSection() {
     return (
-        <Box mt='1rem' mb='1rem' margin={4}>
-            <Box>
-                <Typography variant={"h3"}>
-                    Our <Typography variant={"h3"} component={"span"} sx={{color: "#4F9816"}}>Vision</Typography>
-                </Typography>
-            </Box>
-            <Box mt='1rem' mb='1rem'>
-                <Typography variant={"body2"}>
-                    The Kind Loans App was created by the <Typography component="span" variant='body1'>Murphy Charitable Foundation (MCF)</Typography> to meet the needs of poor women entrepreneurs in Uganda who lack access to traditional banks.
-                </Typography>
-            </Box>
-            <Box mt='1rem' mb='1rem'>
-                <Typography variant={"body2"}>
-                    This app enables lenders to easily fund <strong>interest-free</strong> micro-loans for women entrepreneurs in Uganda, enabling them to start and grow their small businesses, pursue education, and improve the quality of life for their families.
-                </Typography>
-            </Box>
-        </Box>
-    );
-}
-
-const howItWorks = [
-    {
-        icon: PostingIcon,
-        title: "Step 1: Posting",
-        description: "Women entrepreneurs who’ve been carefully vetted and trained in financial literacy by MCF post their funding requests on Kind Loans."
-    },
-    {
-        icon: FundingIcon,
-        title: "Step 2: Funding",
-        description: "Lenders (like you) browse requests and choose which ones to support - 100% of your loan goes directly to them."
-    },
-    {
-        icon: DistributingFundsIcon,
-        title: "Step 3: Distributing Funds",
-        description: "Once a request receives enough support, MCF distributes the money and the repayment period begins."
-    },
-    {
-        icon: StayingConnectedIcon,
-        title: "Step 4: Staying Connected",
-        description: "Every 3 months, you'll receive updates directly from the entrepreneur about how your support is helping their business grow."
-    },
-    {
-        icon: RepaymentIcon,
-        title: "Step 5: Repayment",
-        description: "At the end of the loan period, you'll get your money back as Kind Loans credit, which you can withdraw or re-use to help another entrepreneur!"
-    },
-
-]
-
-function LandingHowItWorks() {
-
-    return (
-        <Box mt='1rem' mb='1rem' margin={4}>
-            <Typography variant={"h3"}>
-                How It <Typography variant={"h3"} component={"span"} sx={{color: "#4F9816"}}>Works</Typography>
+        <Box m={4}>
+            <Typography variant="h3">
+                Our <Typography variant="h3" component="span" sx={{ color: brand.greenDark }}>Vision</Typography>
             </Typography>
-            {howItWorks.map((item, i) => (
-                <Card variant={"outlined"} key={i} sx={{height: "288px", gap: "40px", padding: "24px", border: "1", borderRadius:"12px", display: "flex", flexDirection: "column", marginTop: "24px"}} >
-                    <Box borderRadius={"12px"} sx={{backgroundColor: "#4C842214", justifyContent: "center", alignContent: "center", alignItems: "center", display: "flex"}} width={"64px"} height={"64px"}>
-                        <item.icon key={i} color={"#4C8422"} />
+            <Typography variant="body2" sx={{ mt: 2}}>
+                The Kind Loans App was created by the <u>Murphy Charitable Foundation (MCF)</u> to meet the needs of poor women entrepreneurs in Uganda who lack access to traditional banks.
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 2 }}>
+                This app enables lenders to easily fund <strong>interest-free micro-loans for women entrepreneurs in Uganda</strong>, enabling them to start and grow their small businesses, pursue education, and improve the quality of life for their families.
+            </Typography>
+        </Box>
+    );
+}
+
+const steps = [
+    { icon: PostingIcon, title: 'Post', description: 'Women entrepreneurs post their requests to borrow money (i.e., loan request) on Kind Loans' },
+    { icon: DistributingFundsIcon, title: 'Fund', description: 'Lenders (like you) choose which loan requests to support - 100% of your loan goes directly to them.' },
+    { icon: BellIcon, title: 'Stay Connected', description: 'During the loan period, you’ll get updates directly from the entrepreneur about how your support is helping their business grow.' },
+    { icon: RepaymentIcon, title: 'Get Repaid', description: "Every 3 months, you'll receive updates directly from the entrepreneur about how your support is helping their business grow." },
+];
+
+function HowItWorksSection() {
+    const theme = useTheme();
+    return (
+        <Box m={4}>
+            <Typography variant="h3">
+                How <Typography variant="h3" component="span" sx={{ color: brand.greenDark }}>Kind Loan</Typography> Works
+            </Typography>
+            {steps.map((step, index) => (
+                <Card key={index} variant="outlined" sx={{ border: "unset", mt: 3, p: 3, display: 'flex', flexDirection: 'column', height: 288 }}>
+                    <Box
+                        sx={{
+                            width: 64,
+                            height: 64,
+                            borderRadius: theme.shape.borderRadius / 2,
+                            bgcolor: brand.greenLight,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <step.icon color={brand.greenDark} />
                     </Box>
-                    <Box sx={{marginTop: "auto"}}>
-                        <Typography variant={"h3"}>{item.title}</Typography>
-                        <Typography variant={"body1"} paddingTop={"16px"}>{item.description}</Typography>
+                    <Box sx={{ mt: 'auto' }}>
+                        <Typography variant="h3">{step.title}</Typography>
+                        <Typography variant="body1" sx={{ pt: 2 }}>{step.description}</Typography>
                     </Box>
                 </Card>
-
             ))}
         </Box>
     );
 }
 
-function LandingStories() {
+function StoriesSection() {
     const { data, error } = useQuery<LoanProfile[]>({
-        queryKey: ["story-profile"],
+        queryKey: ['story-profile'],
         queryFn: async () => {
-            const response = await fetch("http://localhost:8000/api/loan/profile?type=stories");
-            if (!response.ok) {
-                throw Error(<Error>"Network response was not ok"</Error>);
-            }
-            console.log(response)
+            const response = await fetch('http://localhost:8000/api/loan/profile?type=stories');
+            if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         },
     });
 
-    if (error) {
-        return (<Box>
-            {error.message}
-        </Box>)
-    }
+    if (error) return <Box m={4}>Error loading stories: {error.message}</Box>;
 
     return (
-        <Box mt='1rem' mb='1rem'>
-            <Box margin={4}>
-                <Box mt='1rem' mb='1rem'>
-                    <Typography variant={"h3"}>
-                        Impact <Typography variant={"h3"} component={"span"} sx={{color: "#4F9816"}}>Stories</Typography>
-                    </Typography>
-                </Box>
-                <Box mt='1rem' mb='1rem'>
-                    <Typography variant='subtitle2'>
-                        Hear from the entrepreneurs that Kind Loans supports.
-                    </Typography>
-                </Box>
+        <Box>
+            <Box m={4}>
+                <Typography variant="h3">
+                    Impact <Typography variant="h3" component="span" sx={{ color: brand.greenDark }}>Stories</Typography>
+                </Typography>
+                <Typography variant="subtitle2" sx={{ mt: 2 }}>
+                    Hear from the entrepreneurs that Kind Loans supports.
+                </Typography>
             </Box>
-            <Box mt='1rem' mb='1rem'>
-                {/* just leave a singe card here for now */}
-                <LandPageCarousel profiles={data}/>
-                {/* <BorrowerCard /> */}
-            </Box>
+            <LandPageCarousel profiles={data} />
         </Box>
     );
 }
 
-function LandingLoanList({targetRef}:{targetRef: Ref<HTMLDivElement>}) {
-    const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-    const handleClose = () => {
-        setOpen(false);
-    };
+const LoanListSection = forwardRef<HTMLDivElement>((props, ref) => {
+    const [searchOpen, setSearchOpen] = useState(false);
 
     const { data, error } = useQuery<LoanProfile[]>({
-        queryKey: ["profile"],
+        queryKey: ['profile'],
         queryFn: async () => {
-            const response = await fetch("http://localhost:8000/api/loan/profile");
-            if (!response.ok) {
-                throw Error(<Error>"Network response was not ok"</Error>);
-            }
-            console.log(response)
+            const response = await fetch('http://localhost:8000/api/loan/profile');
+            if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         },
     });
 
-    if (error) {
-        return (<Box>
-            {error.message}
-        </Box>)
-    }
+    if (error) return <Box m={4}>Error loading loans: {error.message}</Box>;
 
     return (
-        <Box ref={targetRef} margin={4} mt='1rem' mb='1rem'>
-            <Box mt='1rem' mb='1rem'>
-                <Typography variant='h3'>
-                    <Typography variant='h3' component={"span"} sx={{color: "#4F9816"}}>Find</Typography> a Loan to Support
-                </Typography>
-            </Box>
-            <SearchDialog
-                open={open}
-                handleClose={handleClose}
-            />
-            <Box mb='0.5rem' display='flex' justifyContent='space-between' alignItems="center">
-                <Box marginTop={2} width={188}>
-                    <Button variant='outlined' size='small' sx={{
-                        border: "1px solid #74777F",
-                        borderRadius: 4,
-                        color: "#034792",
-                        fontSize: "12px",
-                        fontWeight: 500,
-                    }} onClick={handleClickOpen}>
-                        Filter by Category
-                    </Button>
-                </Box>
+        <Box ref={ref} m={4}>
+            <Typography variant="h3">
+                <Typography variant="h3" component="span" sx={{ color: brand.greenDark }}>Find</Typography> a Loan to Support
+            </Typography>
+
+            <SearchDialog open={searchOpen} handleClose={() => setSearchOpen(false)} />
+
+            <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mt: 2, mb: 1 }}>
+                <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setSearchOpen(true)}
+                    sx={{ fontSize: 12, fontWeight: 500 }}
+                >
+                    Filter by Category
+                </Button>
                 <SortFilterPopover />
             </Box>
-            {/* single card and a filter */}
-            {/* filter working on progress */}
-            <Box marginTop={2}>
-                {data?.map((item) => (
-                    <BorrowerCardWithProgress imgPath={item.profile_img}
-                                              location={item.country+','+item.city}
-                                              deadLine={item.deadline_to_receive_loan}
-                                              loanTitle={item.title}
-                                              remainingBalance={item.remaining_balance}
-                                              targetAmount={item.target_amount}/>
-                    ))}
+
+            <Box sx={{ mt: 2 }}>
+                {data?.map((loan) => (
+                    <BorrowerCardWithProgress
+                        key={loan.id}
+                        imgPath={loan.profile_img}
+                        location={`${loan.country}, ${loan.city}`}
+                        deadLine={loan.deadline_to_receive_loan}
+                        loanTitle={loan.title}
+                        remainingBalance={loan.remaining_balance}
+                        targetAmount={loan.target_amount}
+                    />
+                ))}
             </Box>
-            <Box textAlign="center" mt="2rem" mb="7rem">
-                <Button variant="outlined">
-                    + View More
-                </Button>
+
+            <Box textAlign="center" sx={{ mt: 4, mb: 7 }}>
+                <Button variant="outlined">+ View More</Button>
             </Box>
-            <Box textAlign="center" mb="2rem">
-                <Typography variant='subtitle2'>
+
+            <Box textAlign="center" sx={{ mb: 2 }}>
+                <Typography variant="subtitle2">
                     * 100% of your loan goes to supporting borrowers.
-                    <Typography variant="caption">
+                    <Typography variant="caption" display="block">
                         Terms of conditions
                     </Typography>
-
                 </Typography>
             </Box>
         </Box>
-
     );
-}
-
-export default Landingpage
+});
